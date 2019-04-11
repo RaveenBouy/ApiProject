@@ -11,7 +11,6 @@ using static DataLibrary.BusinessLogic.Verifier;
 
 namespace API.Controllers
 {
-    [Route("api/login")]
     [ApiController]
     public class UserController : Controller
     {
@@ -20,7 +19,9 @@ namespace API.Controllers
         private bool IsValidated { get; set; }
         private new UserModel User { get; set; } = new UserModel();
 
-        public AuthResponseModel Get([FromQuery] string username, string password)
+        [HttpGet]
+        [Route("api/login")]
+        public AuthResponseModel UserLogin([FromQuery] string username, string password)
         {
             var validateResponse = SetResponse(ValidateInput(username, password));
 
@@ -41,6 +42,14 @@ namespace API.Controllers
             {
                 return validateResponse;
             }
+        }
+
+        [HttpPost]
+        [Route("api/register")]
+        public UserModel UserRegister([FromBody] UserModel userModel)
+        {
+            UserProcessor.RegisterUser(userModel);
+            return userModel;
         }
 
         private (int, UserModel) VerifyUser(string username, string password)

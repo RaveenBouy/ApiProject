@@ -13,12 +13,11 @@ namespace DataLibrary.DataAccess
     {
         private static string GetConnectionString()
         {
-            return "Server=127.0.0.1; Port=3306; Database=dsproject; Uid=root";
+            return "Server=127.0.0.1; Port=3306; Database=APIProject; Uid=root";
         }
 
         public static List<T> LoadData<T>(string sql)
         {
-           
             try
             {
                 using (IDbConnection con = new  MySqlConnection(GetConnectionString()))
