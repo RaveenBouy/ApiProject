@@ -35,5 +35,10 @@ namespace DataLibrary.BusinessLogic
         {
             return TokenProcessor.VerifyToken(token) ? true : false;
         }
+
+        public static int VerifyRegistration(UserModel userModel)
+        {
+            return RegisterUser(userModel);
+        }
     }
 }

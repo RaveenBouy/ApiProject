@@ -35,7 +35,7 @@ namespace DataLibrary.BusinessLogic
         {
             var sql = $@"SELECT COUNT(token) FROM authentication_token WHERE Token='{token}'";
             var value = SqlDataAccess.LoadData<int>(sql)[0];
-            return value == 0 ? true : false;
+            return value == 1 ? true : false;
         }
 
         public static int WriteAuthenticationToken(int userId, string token)
