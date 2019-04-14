@@ -22,8 +22,7 @@ namespace API.Controllers
             return BookProcessor.GetBookByType(type, value);
         }
 
-        [HttpGet]
-        [Route("api/books/{id}")]
+        [HttpGet("api/books/{id}")]
         public List<ItemModel> GetBookById(int id)
         {
             return BookProcessor.GetBookById(id);
@@ -31,22 +30,19 @@ namespace API.Controllers
 
         //Requires Authentication to access items categorized as "Rare"
 
-        [HttpGet]
-        [Route("api/books/member/{token}")]
+        [HttpGet("api/books/member/{token}")]
         public IEnumerable<ItemModel> GetAllBooks(string token)
         {
             return BookProcessor.GetAllBooks(token);
         }
 
-        [HttpGet]
-        [Route("api/books/member/{token}/{type}/{value}")]
+        [HttpGet("api/books/member/{token}/{type}/{value}")]
         public IEnumerable<ItemModel> GetBookByType(string token, string type, string value)
         {
             return BookProcessor.GetBookByType(token, type, value);
         }
 
-        [HttpGet]
-        [Route("api/books/member/{token}/{id}")]
+        [HttpGet("api/books/member/{token}/{id}")]
         public List<ItemModel> GetBookById(string token, int id)
         {
             return BookProcessor.GetBookById(token, id);
@@ -54,25 +50,25 @@ namespace API.Controllers
 
         //Requires authentication to manipulate books
 
-        [HttpPost]
-        [Route("api/books/staff")]
-        public AuthResponseModel AddBook([FromBody] ItemModel itemModel)
+        [HttpPost("api/books/staff")]
+        public AuthResponseModel SetBook([FromBody] ItemModel itemModel)
         {
-            return null;
+            InsertLibraryItemLogic setBook = new InsertLibraryItemLogic();
+            return setBook.SetLibraryItem(itemModel, "book");
         }
 
-        [HttpPut]
-        [Route("api/books/staff")]
-        public AuthResponseModel Put([FromBody] int token, int id, string type, string value)
+        [HttpPut("api/books/staff")]
+        public AuthResponseModel UpdateBook([FromBody] DynamicUpdateModel updateModel)
         {
-            return null;
+            UpdateLibraryItemLogic updateBook = new UpdateLibraryItemLogic();
+            return updateBook.UpdateLibraryItem(updateModel, "book");
         }
 
-        [HttpDelete]
-        [Route("api/books/staff/{token}/{id}")]
+        [HttpDelete("api/books/staff/{token}/{id}")]
         public AuthResponseModel DeleteBook(string token, int id)
         {
-            return null;
+            DeleteLibraryItemLogic deleteBook = new DeleteLibraryItemLogic();
+            return deleteBook.DeleteLibraryItem(token, id, "book");
         }
     }
 }

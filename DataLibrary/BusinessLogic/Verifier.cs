@@ -13,6 +13,7 @@ namespace DataLibrary.BusinessLogic
             var userModel = new UserModel();
             bool isError = false;
             bool isUserFound = false;
+            bool isVerified = false;
             var user = LoadUser(username);
 
             if (user != null)
@@ -21,6 +22,11 @@ namespace DataLibrary.BusinessLogic
                 {
                     userModel = user[0];
                     isUserFound = true;
+
+                    if (userModel.IsVerified)
+                    {
+                        isVerified = true;
+                    }
                 }
             }
             else
@@ -28,7 +34,7 @@ namespace DataLibrary.BusinessLogic
                 isError = true;
             }
 
-            return ((!isError ? isUserFound ? Hashing.ValidatePassword(password, userModel.Pass) ? 6 : 3 : 2 : 4), userModel);
+            return ((!isError ? isUserFound ? Hashing.ValidatePassword(password, userModel.Pass) ? isVerified ? 6 : 0 : 3 : 2 : 4), userModel);
         }
 
         public static bool VerifyToken(string token)
@@ -39,6 +45,75 @@ namespace DataLibrary.BusinessLogic
         public static int VerifyRegistration(UserModel userModel)
         {
             return RegisterUser(userModel);
+        }
+
+        public static int VerifyInsertLibraryItem(ItemModel itemModel, string category)
+        {
+            int itemInsertStatus = 0;
+            var userRole = GetUserRole(itemModel.AuthToken);
+
+            if (userRole != 0)
+            {
+                return -1;
+            }
+
+            switch (category)
+            {
+                case "book":
+                    itemModel.Category = "Book";
+                    itemInsertStatus = BookProcessor.SetBook(itemModel);
+                    break;
+                case "newspaper":
+                    break;
+                case "magazine":
+                    break;
+                case "journal":
+                    break;
+                case "manuscript":
+                    break;
+            }
+
+            return itemInsertStatus;
+        }
+
+        public static int VerifyUpdateLibraryItem(string token, int id, string type, string value, string category)
+        {
+            int itemUpdateStatus = 0;
+            var userRole = GetUserRole(token);
+
+            if (userRole != 0)
+            {
+                return -1;
+            }
+
+            switch (category)
+            {
+                case "book":
+                    itemUpdateStatus = BookProcessor.UpdateBook(id, type, value);
+                    break;
+                case "newspaper":
+                    break;
+                case "magazine":
+                    break;
+                case "journal":
+                    break;
+                case "manuscript":
+                    break;
+            }
+
+            return itemUpdateStatus;
+        }
+
+        public static int VerifyDeleteLibraryItem(string token, int id, string category)
+        {
+            var userRole = GetUserRole(token);
+
+            if (userRole != 0)
+            {
+                return -1;
+            }
+
+            return BookProcessor.DeleteBook(id, category);
         }
     }
 }

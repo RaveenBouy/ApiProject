@@ -10,7 +10,7 @@ namespace DataLibrary.BusinessLogic
     {
         public static IEnumerable<ItemModel> GetAllBooks()
         {
-            var sql = "SELECT Id, Title, Description, Author, PublishYear FROM library_item " +
+            var sql = "SELECT * FROM library_item " +
                       "WHERE Category = 'book'" +
                       "AND Access = 'public'";
 
@@ -19,20 +19,20 @@ namespace DataLibrary.BusinessLogic
 
         public static IEnumerable<ItemModel> GetBookByType(string type, string value)
         {
-            var sql = "SELECT Id, Title, Description, Author, PublishYear FROM library_item " +
+            var sql = "SELECT * FROM library_item " +
                       "WHERE Category = 'book'" +
-                      $"AND {type} LIKE '%{value}%'" +
-                      $"AND Access = 'public'";
+                     $"AND {type} LIKE '%{value}%'" +
+                     $"AND Access = 'public'";
 
             return SqlDataAccess.LoadData<ItemModel>(sql);
         }
 
         public static List<ItemModel> GetBookById(int id)
         {
-            var sql = "SELECT Id, Title, Description, Author, PublishYear FROM library_item " +
+            var sql = "SELECT * FROM library_item " +
                       "WHERE Category = 'book' " +
-                      $"AND Id = {id} " +
-                      $"AND Access = 'public'";
+                     $"AND Id = {id} " +
+                     $"AND Access = 'public'";
 
             return SqlDataAccess.LoadData<ItemModel>(sql);
         }
@@ -40,8 +40,8 @@ namespace DataLibrary.BusinessLogic
         public static IEnumerable<ItemModel> GetAllBooks(string token)
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT Id, Title, Description, Author, PublishYear FROM library_item " +
-                      "WHERE Category = 'book' ");
+            sql.Append("SELECT * FROM library_item " +
+                       "WHERE Category = 'book' ");
 
             switch (UserProcessor.GetUserType(token))
             {
@@ -58,8 +58,8 @@ namespace DataLibrary.BusinessLogic
         public static IEnumerable<ItemModel> GetBookByType(string token, string type, string value)
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT Id, Title, Description, Author, PublishYear FROM library_item " +
-                      "WHERE Category = 'book'" +
+            sql.Append("SELECT * FROM library_item " +
+                       "WHERE Category = 'book'" +
                       $"AND {type} LIKE '%{value}%' ");
 
             switch (UserProcessor.GetUserType(token))
@@ -77,8 +77,8 @@ namespace DataLibrary.BusinessLogic
         public static List<ItemModel> GetBookById(string token, int id)
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT Id, Title, Description, Author, PublishYear FROM library_item " +
-                      "WHERE Category = 'book' " +
+            sql.Append("SELECT * FROM library_item " +
+                       "WHERE Category = 'book' " +
                       $"AND Id = {id} " );
 
             switch (UserProcessor.GetUserType(token))
@@ -91,6 +91,49 @@ namespace DataLibrary.BusinessLogic
             }
 
             return SqlDataAccess.LoadData<ItemModel>(sql.ToString());
+        }
+
+        public static int SetBook(ItemModel itemModel)
+        {
+            var sql = $@"INSERT INTO library_item(Title, Description, Author, PublishYear, Category, Access) "+
+                        "VALUES(@Title, @Description, @Author, @PublishYear, @Category, @Access)";
+
+            var model = new ItemModel
+            {
+                Title = itemModel.Title,
+                Description = itemModel.Description,
+                Author = itemModel.Author,
+                PublishYear = itemModel.PublishYear,
+                Category = itemModel.Category,
+                Access = itemModel.Access
+            };
+
+            return SqlDataAccess.SaveData(sql, model);
+        }
+
+        public static int UpdateBook(int id, string type, string value)
+        {
+            var sql = @"UPDATE library_item "+
+                      $"SET {type} = @Value " +
+                       "WHERE id = @Id";
+
+            var data = new DynamicUpdateModel
+            {
+                Id = id,
+                Type = type,
+                Value = value
+            };
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        public static int DeleteBook(int id, string category)
+        {
+            var sql = @"DELETE FROM library_item " +
+                      $"WHERE id = {id} " +
+                      $"AND Category = '{category}'";
+
+            return SqlDataAccess.SaveData(sql, id);
         }
     }
 }

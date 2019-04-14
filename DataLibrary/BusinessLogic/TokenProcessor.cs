@@ -33,14 +33,28 @@ namespace DataLibrary.BusinessLogic
 
         public static bool VerifyToken(string token)
         {
-            var sql = $@"SELECT COUNT(token) FROM authentication_token WHERE Token='{token}'";
-            var value = SqlDataAccess.LoadData<int>(sql)[0];
+            var date = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            int value;
+            var sql = @"SELECT COUNT(token) FROM authentication_token "+
+                      $"WHERE Token='{token}' "+
+                      $"AND ExpireDateTime > '{date}'";
+
+            try
+            {
+                value = SqlDataAccess.LoadData<int>(sql)[0];
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
             return value == 1 ? true : false;
         }
 
         public static int WriteAuthenticationToken(int userId, string token)
         {
-            var date = DateTime.Now.AddHours(12);
+            var date = DateTime.Now.AddHours(24);
             const string sql = @"INSERT INTO authentication_token(UserId, Token, ExpireDateTime) VALUES(@UserId, @Token, @ExpireDateTime);";
 
             var data = new TokenModel

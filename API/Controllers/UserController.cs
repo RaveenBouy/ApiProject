@@ -14,16 +14,14 @@ namespace API.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        [HttpGet]
-        [Route("api/login")]
+        [HttpGet("api/login")]
         public AuthResponseModel UserLogin([FromQuery] string username, string password)
         {
             UserLoginLogic login = new UserLoginLogic();
             return login.Login(username, password);
         }
 
-        [HttpPost]
-        [Route("api/register")]
+        [HttpPost("api/register")]
         public AuthResponseModel UserRegister([FromBody] UserModel userModel)
         {
             UserRegisterLogic logic = new UserRegisterLogic();

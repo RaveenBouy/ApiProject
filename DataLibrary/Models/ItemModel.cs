@@ -10,8 +10,11 @@ namespace DataLibrary.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string Author { get; set; }
-        public string PublishYear { get; set; }
-        public string Type { get; set; }
+        public int PublishYear { get; set; }
+        public string Category { get; set; }
         public string Access { get; set; }
+        public string DateAdded { get; set; }
+        public string DateUpdated { get; set; }
+        public string AuthToken { get; set; }
     }
 }

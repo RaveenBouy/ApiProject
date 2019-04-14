@@ -10,14 +10,24 @@ namespace DataLibrary.BusinessLogic
     {
         public static List<UserModel> LoadUser(string username)
         {
-            var sql = $@"SELECT Id, UserName, Email, Pass, UserType FROM user WHERE UserName = '{username}'";
+            var sql = $@"SELECT * FROM user WHERE UserName = '{username}'";
             return SqlDataAccess.LoadData<UserModel>(sql);
         }
 
         public static int RegisterUser(UserModel userModel)
         {
-            var sql = $@"INSERT INTO user(UserName, Email, Pass, UserType)
-                         VALUES(@Username, @Email, @Pass, @UserType)";
+            bool isVerified;
+            if (userModel.UserType == 1)
+            {
+                isVerified = true;
+            }
+            else
+            {
+                isVerified = false;
+            }
+
+            var sql = @"INSERT INTO user(UserName, Email, Pass, UserType, IsVerified) "+
+                      $"VALUES(@Username, @Email, @Pass, @UserType, {isVerified})";
 
             var model = new UserModel
             {
@@ -27,13 +37,14 @@ namespace DataLibrary.BusinessLogic
                 UserType = userModel.UserType
             };
 
+            SetUserRole(model.UserName);
             return SqlDataAccess.SaveData(sql, model);               
         }
 
         public static int SetUserRole(string userName)
         {
-            var sql = $@"INSERT INTO user_roles(UserName,role)
-                         VALUES(@Username, @Role)";
+            var sql = @"INSERT INTO user_roles(UserName,role) "+
+                       "VALUES(@Username, @Role)";
 
             var model = new UserRoleModel
             {
@@ -44,21 +55,36 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, model);
         }
 
-        public static List<UserRoleModel> GetUserRole(string username)
+        public static int GetUserRole(string token)
         {
-            var sql = $@"SELECT UserName, Role FROM user_roles WHERE UserName = '{username}'";
-            return SqlDataAccess.LoadData<UserRoleModel>(sql);
+            var sql = "SELECT user_roles.Role " +
+                      "FROM user_roles " +
+                      "INNER JOIN user ON user.UserName = user_roles.UserName " +
+                      "INNER JOIN authentication_token ON authentication_token.UserId = user.Id " +
+                     $"WHERE authentication_token.Token = '{token}' ";
+
+            var userRole = SqlDataAccess.LoadData<int>(sql);
+
+            try
+            {
+                return userRole[0];
+
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
 
         public static int GetUserType(string token)
         {
             if (TokenProcessor.VerifyToken(token))
             {
-                var sql = $"SELECT user.UserType " +
+                var sql = "SELECT user.UserType " +
                           "FROM user " +
                           "INNER JOIN authentication_token " +
                           "ON user.Id = authentication_token.UserId " +
-                          $"WHERE Token = '{token}' ";
+                         $"WHERE Token = '{token}' ";
 
                 var user = SqlDataAccess.LoadData<UserModel>(sql);
 

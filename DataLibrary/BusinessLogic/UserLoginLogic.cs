@@ -57,17 +57,14 @@ namespace DataLibrary.BusinessLogic
                 Token = TokenProcessor.GenerateToken();
             }
 
-            using (var bgWorker = new BackgroundWorker())
-            {
-                bgWorker.DoWork += BgWorkerOnDoWork;
-                bgWorker.RunWorkerAsync();
-                return Token;
-            }
+            TokenProcessor.WriteAuthenticationToken(User.Id, Token);
+
+            return Token;
         }
 
         private void BgWorkerOnDoWork(object sender, DoWorkEventArgs e)
         {
-            TokenProcessor.WriteAuthenticationToken(User.Id, Token);
+            
         }
 
         private AuthResponseModel SetResponse(int decision)
@@ -76,6 +73,11 @@ namespace DataLibrary.BusinessLogic
 
             switch (decision)
             {
+                case 0:
+                    jsonResponse.Response = 401;
+                    jsonResponse.Status = "Error";
+                    jsonResponse.Info = "User account is not active yet. Contact the librarian.";
+                    break;
                 case 1:
                     jsonResponse.Response = 403;
                     jsonResponse.Status = "Error";
