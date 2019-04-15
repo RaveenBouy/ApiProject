@@ -42,7 +42,7 @@ namespace DataLibrary.DataAccess
             }
             catch (Exception)
             {
-                return 0;
+                return 3;
             }
         }
     }
