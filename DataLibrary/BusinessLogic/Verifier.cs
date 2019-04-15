@@ -60,16 +60,24 @@ namespace DataLibrary.BusinessLogic
             switch (category)
             {
                 case "book":
-                    itemModel.Category = "Book";
+                    itemModel.Category = category;
                     itemInsertStatus = BookProcessor.SetBook(itemModel);
                     break;
                 case "newspaper":
+                    itemModel.Category = category;
+                    itemInsertStatus = NewspaperProcessor.SetNewspaper(itemModel);
                     break;
                 case "magazine":
+                    itemModel.Category = category;
+                    itemInsertStatus = MagazineProcessor.SetMagazine(itemModel);
                     break;
                 case "journal":
+                    itemModel.Category = category;
+                    itemInsertStatus = JournalProcessor.SetJournal(itemModel);
                     break;
                 case "manuscript":
+                    itemModel.Category = category;
+                    itemInsertStatus = ManuscriptProcessor.SetManuscript(itemModel);
                     break;
             }
 
@@ -92,12 +100,16 @@ namespace DataLibrary.BusinessLogic
                     itemUpdateStatus = BookProcessor.UpdateBook(id, type, value);
                     break;
                 case "newspaper":
+                    itemUpdateStatus = NewspaperProcessor.UpdateNewspaper(id, type, value);
                     break;
                 case "magazine":
+                    itemUpdateStatus = MagazineProcessor.UpdateMagazine(id, type, value);
                     break;
                 case "journal":
+                    itemUpdateStatus = JournalProcessor.UpdateJournal(id, type, value);
                     break;
                 case "manuscript":
+                    itemUpdateStatus = ManuscriptProcessor.UpdateManuscript(id, type, value);
                     break;
             }
 
