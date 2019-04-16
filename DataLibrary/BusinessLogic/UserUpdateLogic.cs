@@ -7,12 +7,12 @@ using static DataLibrary.BusinessLogic.Verifier;
 
 namespace DataLibrary.BusinessLogic
 {
-    public class UpdateLibraryItemLogic
+    public class UserUpdateLogic
     {
         private bool IsVerified { get; set; }
         private bool IsValidated { get; set; }
 
-        public AuthResponseModel UpdateLibraryItem(DynamicUpdateModel updateModel, string category)
+        public AuthResponseModel UserUpdate(DynamicUpdateModel updateModel)
         {
             var validateResponse = SetResponse(ValidateInput(updateModel.AuthToken, updateModel.Id, updateModel.Type, updateModel.Value));
 

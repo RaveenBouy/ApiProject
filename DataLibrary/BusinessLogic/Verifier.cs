@@ -127,5 +127,29 @@ namespace DataLibrary.BusinessLogic
 
             return BookProcessor.DeleteBook(id, category);
         }
+
+        public static int VerifyUpdateUser(string token, int id, string type, string value)
+        {
+            var userRole = GetUserRole(token);
+
+            if (userRole != 0)
+            {
+                return -1;
+            }
+
+            return UserProcessor.UpdateUser(id, type, value);
+        }
+
+        public static int VerifyDeleteUser(string token, int id)
+        {
+            var userRole = GetUserRole(token);
+
+            if (userRole != 0)
+            {
+                return -1;
+            }
+
+            return UserProcessor.DeleteUser(id);
+        }
     }
 }

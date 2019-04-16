@@ -7,23 +7,23 @@ using static DataLibrary.BusinessLogic.Verifier;
 
 namespace DataLibrary.BusinessLogic
 {
-    public class UpdateLibraryItemLogic
+    public class DeleteUserLogic
     {
-        private bool IsVerified { get; set; }
+        bool IsVerified { get; set; }
         private bool IsValidated { get; set; }
 
-        public AuthResponseModel UpdateLibraryItem(DynamicUpdateModel updateModel, string category)
+        public AuthResponseModel DeleteUser(string token, int id)
         {
-            var validateResponse = SetResponse(ValidateInput(updateModel.AuthToken, updateModel.Id, updateModel.Type, updateModel.Value));
+            var validateResponse = SetResponse(ValidateInput(token, id));
 
             if (IsValidated)
             {
-                var result = VerifyUpdateUser(updateModel.AuthToken, updateModel.Id, updateModel.Type, updateModel.Value);
+                var result = VerifyDeleteUser(token, id);
                 var verifyResponse = SetResponse(result);
 
                 if (IsVerified)
                 {
-                    return SetResponse(8);
+                    return SetResponse(6);
                 }
 
                 return verifyResponse;
@@ -34,9 +34,9 @@ namespace DataLibrary.BusinessLogic
             }
         }
 
-        private int ValidateInput(string token, int id, string type, string value)
+        private int ValidateInput(string token, int id)
         {
-            return ValidateUserUpdate(token, id, type, value);
+            return ValidateDeleteUser(token, id);
         }
 
         private AuthResponseModel SetResponse(int decision)
@@ -77,19 +77,9 @@ namespace DataLibrary.BusinessLogic
                     jsonResponse.Info = "<Id> is required";
                     break;
                 case 6:
-                    jsonResponse.Response = 403;
-                    jsonResponse.Status = "Error";
-                    jsonResponse.Info = "<Type> is required";
-                    break;
-                case 7:
-                    jsonResponse.Response = 403;
-                    jsonResponse.Status = "Error";
-                    jsonResponse.Info = "<Value> is required";
-                    break;
-                case 8:
                     jsonResponse.Response = 200;
                     jsonResponse.Status = "Success";
-                    jsonResponse.Info = "Item Updated successfully!";
+                    jsonResponse.Info = "Item Deleted successfully!";
                     break;
             }
 

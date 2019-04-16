@@ -55,6 +55,64 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, model);
         }
 
+        public static int UpdateUser(int id, string type, string value)
+        {
+            var sql = @"UPDATE user " +
+                      $"SET {type} = @Value " +
+                       "WHERE id = @Id";
+
+            var data = new DynamicUpdateModel
+            {
+                Id = id,
+                Type = type,
+                Value = value
+            };
+
+            return SqlDataAccess.SaveData(sql, data);
+        }
+
+        public static int DeleteUser(int id)
+        {
+            var sql = @"DELETE FROM user " +
+                      $"WHERE id = {id} ";
+
+            DeleteUserAuthTokens(id);
+            DeleteUserRole(id);
+            return SqlDataAccess.SaveData(sql, id);
+        }
+
+        public static int DeleteUserAuthTokens(int id)
+        {
+            var sql = @"DELETE FROM authentication_token " +
+                      $"WHERE UserId = {id} ";
+
+            DeleteUserRole(id);
+            return SqlDataAccess.SaveData(sql, id);
+        }
+
+        public static int DeleteUserRole(int id)
+        {
+            var sql = "SELECT UserName FROM user " +
+                     $"WHERE Id = {id}";
+
+            var user = SqlDataAccess.LoadData<UserModel>(sql);
+            string username = null;
+
+            try
+            {
+                username = user[0].UserName;
+            }
+            catch (Exception)
+            {
+                return 3;
+            }
+
+            var sql2 = @"DELETE FROM user_roles " +
+                      $"WHERE username = '{username}' ";
+
+            return SqlDataAccess.SaveData(sql2, id);
+        }
+
         public static int GetUserRole(string token)
         {
             var sql = "SELECT user_roles.Role " +
@@ -101,6 +159,20 @@ namespace DataLibrary.BusinessLogic
             {
                 return -1;
             }
+        }
+
+        public static IEnumerable<UserModel> GetAllUsers(string token)
+        {
+            var sql = "SELECT * FROM user";
+
+            var userRole = GetUserRole(token);
+
+            if (userRole != 0)
+            {
+                return null;
+            }
+
+            return SqlDataAccess.LoadData<UserModel>(sql.ToString());
         }
     }
 }

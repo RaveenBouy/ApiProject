@@ -15,17 +15,37 @@ namespace API.Controllers
     public class UserController : Controller
     {
         [HttpGet("api/login")]
-        public AuthResponseModel UserLogin([FromQuery] string username, string password)
+        public AuthResponseModel LoginUser([FromQuery] string username, string password)
         {
             UserLoginLogic login = new UserLoginLogic();
             return login.Login(username, password);
         }
 
+        [HttpGet("api/staff/users{token}")]
+        public IEnumerable<UserModel> GetAllUsers(string token)
+        {
+            return UserProcessor.GetAllUsers(token);
+        }
+
         [HttpPost("api/register")]
-        public AuthResponseModel UserRegister([FromBody] UserModel userModel)
+        public AuthResponseModel RegisterUser([FromBody] UserModel userModel)
         {
             UserRegisterLogic logic = new UserRegisterLogic();
             return logic.UserRegister(userModel);
+        }
+
+        [HttpPut("api/staff/updateuser")]
+        public AuthResponseModel UpdateUser([FromBody] DynamicUpdateModel updateModel)
+        {
+            UserUpdateLogic logic = new UserUpdateLogic();
+            return logic.UserUpdate(updateModel);
+        }
+
+        [HttpDelete("api/staff/deleteuser{token}/{id}")]
+        public AuthResponseModel DeleteUser(string token, int id)
+        {
+            DeleteUserLogic deleteUser = new DeleteUserLogic();
+            return deleteUser.DeleteUser(token, id);
         }
     }
 }
