@@ -30,8 +30,17 @@ namespace DataLibrary.BusinessLogic
         {
             StringBuilder sql = new StringBuilder();
             sql.Append("SELECT * FROM library_item " +
-                       "WHERE Category = 'Magazine'" +
-                      $"AND {type} LIKE '%{value}%' ");
+                       "WHERE Category = 'Magazine' " +
+                      $"AND {type} ");
+
+            if (type.Equals("Id"))
+            {
+                sql.Append($" = {value} ");
+            }
+            else
+            {
+                sql.Append($" LIKE '%{value}%' ");
+            }
 
             switch (UserProcessor.GetUserType(token))
             {
@@ -98,11 +107,10 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
-        public static int DeleteMagazine(int id, string category)
+        public static int DeleteMagazine(int id)
         {
             var sql = @"DELETE FROM library_item " +
-                      $"WHERE id = {id} " +
-                      $"AND Category = '{category}'";
+                      $"WHERE id = {id}";
 
             return SqlDataAccess.SaveData(sql, id);
         }

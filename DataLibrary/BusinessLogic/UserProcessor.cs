@@ -126,7 +126,6 @@ namespace DataLibrary.BusinessLogic
             try
             {
                 return userRole[0];
-
             }
             catch (Exception)
             {

@@ -118,6 +118,7 @@ namespace DataLibrary.BusinessLogic
 
         public static int VerifyDeleteLibraryItem(string token, int id, string category)
         {
+            int itemUpdateStatus = 0;
             var userRole = GetUserRole(token);
 
             if (userRole != 0)
@@ -125,7 +126,26 @@ namespace DataLibrary.BusinessLogic
                 return -1;
             }
 
-            return BookProcessor.DeleteBook(id, category);
+            switch (category)
+            {
+                case "book":
+                    itemUpdateStatus = BookProcessor.DeleteBook(id);
+                    break;
+                case "newspaper":
+                    itemUpdateStatus = NewspaperProcessor.DeleteNewspaper(id);
+                    break;
+                case "magazine":
+                    itemUpdateStatus = MagazineProcessor.DeleteMagazine(id);
+                    break;
+                case "journal":
+                    itemUpdateStatus = JournalProcessor.DeleteJournal(id);
+                    break;
+                case "manuscript":
+                    itemUpdateStatus = ManuscriptProcessor.DeleteManuscript(id);
+                    break;
+            }
+
+            return itemUpdateStatus;
         }
 
         public static int VerifyUpdateUser(string token, int id, string type, string value)
@@ -137,7 +157,7 @@ namespace DataLibrary.BusinessLogic
                 return -1;
             }
 
-            return UserProcessor.UpdateUser(id, type, value);
+            return UpdateUser(id, type, value);
         }
 
         public static int VerifyDeleteUser(string token, int id)
@@ -149,7 +169,7 @@ namespace DataLibrary.BusinessLogic
                 return -1;
             }
 
-            return UserProcessor.DeleteUser(id);
+            return DeleteUser(id);
         }
     }
 }

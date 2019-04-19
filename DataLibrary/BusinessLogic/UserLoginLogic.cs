@@ -12,6 +12,7 @@ namespace DataLibrary.BusinessLogic
     {
         private string Token { get; set; }
         private bool IsVerified { get; set; }
+        private int UserRole { get; set; }
         private bool IsValidated { get; set; }
         private new UserModel User { get; set; } = new UserModel();
 
@@ -57,7 +58,7 @@ namespace DataLibrary.BusinessLogic
                 Token = TokenProcessor.GenerateToken();
             }
 
-            TokenProcessor.WriteAuthenticationToken(User.Id, Token);
+            UserRole = TokenProcessor.WriteAuthenticationToken(User.Id, Token);
 
             return Token;
         }
@@ -102,6 +103,7 @@ namespace DataLibrary.BusinessLogic
                     jsonResponse.Response = 200;
                     jsonResponse.Status = "Success";
                     jsonResponse.Token = GenerateUserToken();
+                    jsonResponse.Value = UserRole;
                     break;
                 case 6:
                     IsVerified = true;

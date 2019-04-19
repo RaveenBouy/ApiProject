@@ -14,11 +14,11 @@ namespace DataLibrary.BusinessLogic
 
         public AuthResponseModel UpdateLibraryItem(DynamicUpdateModel updateModel, string category)
         {
-            var validateResponse = SetResponse(ValidateInput(updateModel.AuthToken, updateModel.Id, updateModel.Type, updateModel.Value));
+            var validateResponse = SetResponse(ValidateUpdateLibraryItem(updateModel.AuthToken, updateModel.Id, updateModel.Type, updateModel.Value));
 
             if (IsValidated)
             {
-                var result = VerifyUpdateUser(updateModel.AuthToken, updateModel.Id, updateModel.Type, updateModel.Value);
+                var result = VerifyUpdateLibraryItem(updateModel.AuthToken, updateModel.Id, updateModel.Type, updateModel.Value, category);
                 var verifyResponse = SetResponse(result);
 
                 if (IsVerified)
@@ -32,11 +32,6 @@ namespace DataLibrary.BusinessLogic
             {
                 return validateResponse;
             }
-        }
-
-        private int ValidateInput(string token, int id, string type, string value)
-        {
-            return ValidateUserUpdate(token, id, type, value);
         }
 
         private AuthResponseModel SetResponse(int decision)

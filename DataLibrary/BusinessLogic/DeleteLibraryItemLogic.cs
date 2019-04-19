@@ -14,7 +14,7 @@ namespace DataLibrary.BusinessLogic
 
         public AuthResponseModel DeleteLibraryItem(string token, int id, string category)
         {
-            var validateResponse = SetResponse(ValidateInput(token, id));
+            var validateResponse = SetResponse(ValidateDeleteLibraryItem(token, id));
 
             if (IsValidated)
             {
@@ -32,11 +32,6 @@ namespace DataLibrary.BusinessLogic
             {
                 return validateResponse;
             }
-        }
-
-        private int ValidateInput(string token, int id)
-        {
-            return ValidateDeleteLibraryItem(token, id);
         }
 
         private AuthResponseModel SetResponse(int decision)

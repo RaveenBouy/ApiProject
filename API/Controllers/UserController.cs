@@ -21,7 +21,7 @@ namespace API.Controllers
             return login.Login(username, password);
         }
 
-        [HttpGet("api/staff/users{token}")]
+        [HttpGet("api/staff/users/{token}")]
         public IEnumerable<UserModel> GetAllUsers(string token)
         {
             return UserProcessor.GetAllUsers(token);
@@ -41,7 +41,7 @@ namespace API.Controllers
             return logic.UserUpdate(updateModel);
         }
 
-        [HttpDelete("api/staff/deleteuser{token}/{id}")]
+        [HttpDelete("api/staff/deleteuser/{token}/{id}")]
         public AuthResponseModel DeleteUser(string token, int id)
         {
             DeleteUserLogic deleteUser = new DeleteUserLogic();

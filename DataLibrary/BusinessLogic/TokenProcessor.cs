@@ -64,7 +64,9 @@ namespace DataLibrary.BusinessLogic
                 ExpireDateTime = date.ToString("yyyy-MM-dd hh:mm:ss")
             };
 
-            return SqlDataAccess.SaveData(sql, data);
+            SqlDataAccess.SaveData(sql, data);
+
+            return UserProcessor.GetUserRole(token);
         }
     }
 }

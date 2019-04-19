@@ -55,12 +55,21 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.LoadData<ItemModel>(sql.ToString());
         }
 
-        public static IEnumerable<ItemModel> GetBookByType(string token, string type, string value)
+        public static List<ItemModel> GetBookByType(string token, string type, string value)
         {
             StringBuilder sql = new StringBuilder();
             sql.Append("SELECT * FROM library_item " +
-                       "WHERE Category = 'book'" +
-                      $"AND {type} LIKE '%{value}%' ");
+                       "WHERE Category = 'book' " +
+                      $"AND {type} ");
+
+            if (type.Equals("Id"))
+            {
+                sql.Append($" = {value} ");
+            }
+            else
+            {
+                sql.Append($" LIKE '%{value}%' ");
+            }
 
             switch (UserProcessor.GetUserType(token))
             {
@@ -127,11 +136,10 @@ namespace DataLibrary.BusinessLogic
             return SqlDataAccess.SaveData(sql, data);
         }
 
-        public static int DeleteBook(int id, string category)
+        public static int DeleteBook(int id)
         {
             var sql = @"DELETE FROM library_item " +
-                      $"WHERE id = {id} " +
-                      $"AND Category = '{category}'";
+                      $"WHERE id = {id}";
 
             return SqlDataAccess.SaveData(sql, id);
         }

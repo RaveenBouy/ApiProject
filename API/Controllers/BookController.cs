@@ -37,7 +37,7 @@ namespace API.Controllers
         }
 
         [HttpGet("api/book/member/{token}/{type}/{value}")]
-        public IEnumerable<ItemModel> GetBookByType(string token, string type, string value)
+        public List<ItemModel> GetBookByType(string token, string type, string value)
         {
             return BookProcessor.GetBookByType(token, type, value);
         }
