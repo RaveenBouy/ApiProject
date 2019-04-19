@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Models\AuthResponseModel.cs" />
     <Compile Include="Models\ItemModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

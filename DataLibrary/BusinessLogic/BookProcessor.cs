@@ -124,7 +124,8 @@ namespace DataLibrary.BusinessLogic
         {
             var sql = @"UPDATE library_item "+
                       $"SET {type} = @Value " +
-                       "WHERE id = @Id";
+                       "WHERE id = @Id " +
+                       "AND Category = 'book'";
 
             var data = new DynamicUpdateModel
             {
@@ -139,7 +140,8 @@ namespace DataLibrary.BusinessLogic
         public static int DeleteBook(int id)
         {
             var sql = @"DELETE FROM library_item " +
-                      $"WHERE id = {id}";
+                      $"WHERE id = {id} " +
+                       "AND Category = 'book'";
 
             return SqlDataAccess.SaveData(sql, id);
         }

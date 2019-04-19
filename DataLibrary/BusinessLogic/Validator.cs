@@ -68,7 +68,7 @@ namespace DataLibrary.BusinessLogic
 
             try
             {
-                if (type.ToLower().Contains("PublishYear"))
+                if (type.ToLower().Contains("publishyear"))
                 {
                     try
                     {

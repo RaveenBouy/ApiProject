@@ -120,5 +120,64 @@ namespace Client.Classes
 
             return response;
         }
+
+        public async Task<AuthResponseModel> UpdateBook(int id, string type, string value)
+        {
+            string myJson = "{'id': '" + id + "', 'type' : '" + type + "', 'value':'" + value + "', 'authToken' : '" + ReferenceList.Token + "'}";
+            JsonData json = new JsonData();
+            var response = new AuthResponseModel();
+
+            using (var client = new HttpClient())
+            {
+                var post = await client.PutAsync(
+                            ReferenceList.BookStaff,
+                            new StringContent(myJson, Encoding.UTF8, "application/json"));
+
+                json = await post.Content.ReadAsStringAsync();
+            }
+
+            try
+            {
+                json = JsonMapper.ToObject(json.ToString());
+                response.Response = (int)json["response"];
+                response.Status = json["status"].ToString();
+                response.Info = json["info"].ToString();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.GetBaseException().ToString());
+            }
+
+            return response;
+        }
+
+        public async Task<AuthResponseModel> DeleteBook(int id)
+        {
+            JsonData json = new JsonData();
+            var response = new AuthResponseModel();
+
+            using (var client = new HttpClient())
+            {
+                var post = await client.DeleteAsync(
+                            ReferenceList.BookStaff +
+                            $"{ReferenceList.Token}/{id}");
+
+                json = await post.Content.ReadAsStringAsync();
+            }
+
+            try
+            {
+                json = JsonMapper.ToObject(json.ToString());
+                response.Response = (int)json["response"];
+                response.Status = json["status"].ToString();
+                response.Info = json["info"].ToString();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.GetBaseException().ToString());
+            }
+
+            return response;
+        }
     }
 }

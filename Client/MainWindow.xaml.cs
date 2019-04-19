@@ -2,20 +2,10 @@
 using Client.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace Client
 {
@@ -25,6 +15,7 @@ namespace Client
     public partial class MainWindow : Window
     {
         public List<ItemModel> Item { get; set; } = new List<ItemModel>();
+        public List<UserModel> User { get; set; } = new List<UserModel>();
         public MainWindow()
         {
             InitializeComponent();
@@ -50,28 +41,28 @@ namespace Client
 
             }
             else
-            if(type == T4.Content.ToString()) //Newspapers
+            if (type == T4.Content.ToString()) //Newspapers
             {
                 NewspaperProcessor newspaper = new NewspaperProcessor();
                 Item = newspaper.GetNewspapers(ReferenceList.Token, value, searchvalue);
                 LBItemList.DataContext = Item;
             }
             else
-            if(type == T5.Content.ToString()) //Journals
+            if (type == T5.Content.ToString()) //Journals
             {
                 JournalProcessor journal = new JournalProcessor();
                 Item = journal.GetJournals(ReferenceList.Token, value, searchvalue);
                 LBItemList.DataContext = Item;
             }
             else
-            if(type == T6.Content.ToString()) //Magazines
+            if (type == T6.Content.ToString()) //Magazines
             {
                 MagazineProcessor magazine = new MagazineProcessor();
                 Item = magazine.GetMagazines(ReferenceList.Token, value, searchvalue);
                 LBItemList.DataContext = Item;
             }
             else
-            if(type == T7.Content.ToString()) //Manuscripts
+            if (type == T7.Content.ToString()) //Manuscripts
             {
                 ManuscriptProcessor manuscript = new ManuscriptProcessor();
                 Item = manuscript.GetManuscripts(ReferenceList.Token, value, searchvalue);
@@ -136,7 +127,7 @@ namespace Client
                 else
                 {
                     VisibityForRoles(login.Value);
-                } 
+                }
             }
             else
             {
@@ -197,9 +188,255 @@ namespace Client
             }
         }
 
+
+        private async void InsertItemAsync()
+        {
+            var title = TBAddItemTitle.Text;
+            var description = TBAddItemDescription.Text;
+            var author = TBAddItemAuthor.Text;
+            var response = new AuthResponseModel();
+            int publishYear;
+
+            if (!Regex.IsMatch(TBAddItemPublishYear.Text, @"^\d{4}$"))
+            {
+                MessageBox.Show("Year should consist of 4 Numbers!");
+                return;
+            }
+            else
+            {
+                publishYear = Convert.ToInt32(TBAddItemPublishYear.Text);
+            }
+
+            ComboBoxItem typeItem = (ComboBoxItem)CBAddItemCategory.SelectedItem;
+            string category = typeItem.Content.ToString();
+
+            ComboBoxItem typeItem2 = (ComboBoxItem)CBAddItemAccess.SelectedItem;
+            string access = typeItem2.Content.ToString();
+
+            if (category == T13.Content.ToString()) //Books
+            {
+                BookProcessor book = new BookProcessor();
+                response = await book.InsertBook(title, description, author, publishYear, access);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T14.Content.ToString()) //Newspapers
+            {
+                NewspaperProcessor newspaper = new NewspaperProcessor();
+                response = await newspaper.InsertNewspaper(title, description, author, publishYear, access);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T15.Content.ToString()) //Journals
+            {
+                JournalProcessor journal = new JournalProcessor();
+                response = await journal.InsertJournal(title, description, author, publishYear, access);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T16.Content.ToString()) //Magazines
+            {
+                MagazineProcessor magazine = new MagazineProcessor();
+                response = await magazine.InsertMagazine(title, description, author, publishYear, access);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T17.Content.ToString()) //Manuscripts
+            {
+                ManuscriptProcessor manuscript = new ManuscriptProcessor();
+                response = await manuscript.InsertManuscript(title, description, author, publishYear, access);
+                MessageBox.Show(response.Info);
+            }
+        }
+
+        private async void UpdateItem()
+        {
+            var idText = TBUpdateItemId.Text;
+            var value = TBUpdateItemValue.Text;
+            var response = new AuthResponseModel();
+            int id;
+
+            if (!Regex.IsMatch(idText, @"^\d+$"))
+            {
+                MessageBox.Show("ID should be a number!");
+                return;
+            }
+            else
+            {
+                id = Convert.ToInt32(idText);
+            }
+
+            ComboBoxItem typeItem = (ComboBoxItem)CBUpdateItemCategory.SelectedItem;
+            string category = typeItem.Content.ToString();
+
+            ComboBoxItem typeItem2 = (ComboBoxItem)CBUpdateItemType.SelectedItem;
+            string type = typeItem2.Content.ToString();
+
+            if (category == T26.Content.ToString()) //Books
+            {
+                BookProcessor book = new BookProcessor();
+                response = await book.UpdateBook(id, type, value);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T27.Content.ToString()) //Newspapers
+            {
+                NewspaperProcessor newspaper = new NewspaperProcessor();
+                response = await newspaper.UpdateNewspaper(id, type, value);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T28.Content.ToString()) //Journals
+            {
+                JournalProcessor journal = new JournalProcessor();
+                response = await journal.UpdateJournal(id, type, value);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T29.Content.ToString()) //Magazines
+            {
+                MagazineProcessor magazine = new MagazineProcessor();
+                response = await magazine.UpdateMagazine(id, type, value);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T30.Content.ToString()) //Manuscripts
+            {
+                ManuscriptProcessor manuscript = new ManuscriptProcessor();
+                response = await manuscript.UpdateManuscript(id, type, value);
+                MessageBox.Show(response.Info);
+            }
+        }
+
+        private async void DeleteItem()
+        {
+            var idText = TBDeleteItemId.Text;
+            var response = new AuthResponseModel();
+            int id;
+
+            if (!Regex.IsMatch(idText, @"^\d+$"))
+            {
+                MessageBox.Show("ID should be a number!");
+                return;
+            }
+            else
+            {
+                id = Convert.ToInt32(idText);
+            }
+
+            ComboBoxItem typeItem = (ComboBoxItem)CBDeleteItemCategory.SelectedItem;
+            string category = typeItem.Content.ToString();
+
+            if (category == T31.Content.ToString()) //Books
+            {
+                BookProcessor book = new BookProcessor();
+                response = await book.DeleteBook(id);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T32.Content.ToString()) //Newspapers
+            {
+                NewspaperProcessor newspaper = new NewspaperProcessor();
+                response = await newspaper.DeleteNewspaper(id);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T33.Content.ToString()) //Journals
+            {
+                JournalProcessor journal = new JournalProcessor();
+                response = await journal.DeleteJournal(id);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T34.Content.ToString()) //Magazines
+            {
+                MagazineProcessor magazine = new MagazineProcessor();
+                response = await magazine.DeleteMagazine(id);
+                MessageBox.Show(response.Info);
+            }
+            else
+            if (category == T35.Content.ToString()) //Manuscripts
+            {
+                ManuscriptProcessor manuscript = new ManuscriptProcessor();
+                response = await manuscript.DeleteManuscript(id);
+                MessageBox.Show(response.Info);
+            }
+        }
+
+        private async void UpdateUser()
+        {
+            var idText = TBUpdateUserId.Text;
+            var value = TBUpdateUserValue.Text;
+            var response = new AuthResponseModel();
+            int id;
+
+            if (!Regex.IsMatch(idText, @"^\d+$"))
+            {
+                MessageBox.Show("ID should be a number!");
+                return;
+            }
+            else
+            {
+                id = Convert.ToInt32(idText);
+            }
+
+            ComboBoxItem typeItem = (ComboBoxItem)CBUpdateUserType.SelectedItem;
+            string type = typeItem.Content.ToString();
+
+            if (type == T38.Content.ToString()) //UserType
+            {
+                if (!Regex.IsMatch(value, @"^\d+$"))
+                {
+                    MessageBox.Show("UserType should either be 1 = Local / 2 = Foreigner");
+                    return;
+                }
+            }
+            else
+            if (type == T39.Content.ToString()) //IsVerified
+            {
+                if (!Regex.IsMatch(value, @"^\d+$"))
+                {
+                    MessageBox.Show("IsVerified should either be 0/1");
+                    return;
+                }
+            }
+
+            var processor = new UserProcessor();
+            response = await processor.UpdateUser(id, type, value);
+            MessageBox.Show(response.Info);
+        }
+
+        private async void DeleteUser()
+        {
+            var idText = TBDeleteUserId.Text;
+            var response = new AuthResponseModel();
+            int id;
+
+            if (!Regex.IsMatch(idText, @"^\d+$"))
+            {
+                MessageBox.Show("ID should be a number!");
+                return;
+            }
+            else
+            {
+                id = Convert.ToInt32(idText);
+            }
+
+            var processor = new UserProcessor();
+            response = await processor.DeleteUser(id);
+            MessageBox.Show(response.Info);
+        }
+
+        private async void GetUsers()
+        {
+            UserProcessor user = new UserProcessor();
+            User = await user.GetAllUsers();
+            LBUserList.DataContext = User;
+        }
+
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            if( Regex.IsMatch(Username.Text, @"^[a-zA-Z0-9-_%£$@\\/]*$"))
+            if (Regex.IsMatch(Username.Text, @"^[a-zA-Z0-9-_%£$@\\/]*$"))
             {
                 if (Regex.IsMatch(Password.Text, @"^[a-zA-Z0-9-_%£$@/\\]*$"))
                 {
@@ -296,16 +533,6 @@ namespace Client
             GridHomeHome.Visibility = Visibility.Visible;
         }
 
-        private void BtnStaffViewUsers_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void BtnStaffUpdateUsers_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             GridMemberHome.Visibility = Visibility.Hidden;
@@ -315,6 +542,8 @@ namespace Client
             GridHomeHome.Visibility = Visibility.Collapsed;
             GridHomeNav.Visibility = Visibility.Collapsed;
             GridItemManage.Visibility = Visibility.Hidden;
+            GridViewUsers.Visibility = Visibility.Hidden;
+            GridUpdateUsers.Visibility = Visibility.Hidden;
         }
 
         private void BtnHome_Click(object sender, RoutedEventArgs e)
@@ -324,6 +553,8 @@ namespace Client
             GridHomeHome.Visibility = Visibility.Collapsed;
             GridItemManage.Visibility = Visibility.Hidden;
             GridMemberHome.Visibility = Visibility.Hidden;
+            GridViewUsers.Visibility = Visibility.Hidden;
+            GridUpdateUsers.Visibility = Visibility.Hidden;
         }
 
         private void BtnAddItem_Click(object sender, RoutedEventArgs e)
@@ -331,65 +562,57 @@ namespace Client
             InsertItemAsync();
         }
 
-        private async Task InsertItemAsync()
+        private void BtnUpdateItem_Click(object sender, RoutedEventArgs e)
         {
-            var title = TBAddItemTitle.Text;
-            var description = TBAddItemDescription.Text;
-            var author = TBAddItemAuthor.Text;
-            var response = new AuthResponseModel();
-            int publishYear;
-
-            if (!Regex.IsMatch(TBAddItemPublishYear.Text, "[^0-9.-]+"))
-            {
-                MessageBox.Show("Year should consist of 4 Numbers!");
-                return;
-            }
-            else
-            {
-                publishYear = Convert.ToInt32(TBAddItemPublishYear.Text);
-            }
-
-            ComboBoxItem typeItem = (ComboBoxItem)CBAddItemCategory.SelectedItem;
-            string category = typeItem.Content.ToString();
-
-            ComboBoxItem typeItem2 = (ComboBoxItem)CBAddItemAccess.SelectedItem;
-            string access = typeItem2.Content.ToString();
-
-
-            if (category == T13.Content.ToString()) //Books
-            {
-                BookProcessor book = new BookProcessor();
-                response = await book.InsertBook(title,description,author,publishYear, access);
-                MessageBox.Show(response.Info);
-            }
-            /*else
-            if (category == T14.Content.ToString()) //Newspapers
-            {
-                NewspaperProcessor newspaper = new NewspaperProcessor();
-                Item = newspaper.GetNewspapers(ReferenceList.Token, value, searchvalue);
-                LBItemList.DataContext = Item;
-            }
-            else
-            if (category == T15.Content.ToString()) //Journals
-            {
-                JournalProcessor journal = new JournalProcessor();
-                Item = journal.GetJournals(ReferenceList.Token, value, searchvalue);
-                LBItemList.DataContext = Item;
-            }
-            else
-            if (category == T16.Content.ToString()) //Magazines
-            {
-                MagazineProcessor magazine = new MagazineProcessor();
-                Item = magazine.GetMagazines(ReferenceList.Token, value, searchvalue);
-                LBItemList.DataContext = Item;
-            }
-            else
-            if (category == T17.Content.ToString()) //Manuscripts
-            {
-                ManuscriptProcessor manuscript = new ManuscriptProcessor();
-                Item = manuscript.GetManuscripts(ReferenceList.Token, value, searchvalue);
-                LBItemList.DataContext = Item;
-            }*/
+            UpdateItem();
         }
+
+        private void BtnDeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteItem();
+        }
+        
+        private void BtnViewUsers_Click(object sender, RoutedEventArgs e)
+        {
+            GetUsers();
+        }
+
+        private void BtnStaffViewUsers_Click(object sender, RoutedEventArgs e)
+        {
+            GridStaffMenu.Visibility = Visibility.Hidden;
+            GridViewUsers.Visibility = Visibility.Visible;
+            GridHomeHome.Visibility = Visibility.Visible;
+        }
+
+        private void BtnStaffUpdateUsers_Click(object sender, RoutedEventArgs e)
+        {
+            GridUpdateUsers.Visibility = Visibility.Visible;
+            GridHomeHome.Visibility = Visibility.Visible;
+            GridStaffMenu.Visibility = Visibility.Hidden;
+        }
+
+        private void LBUserList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LBUserList.SelectedIndex != -1)
+            {
+                GridUserDetails.Visibility = Visibility.Visible;
+                GridUserDetails.DataContext = User[LBUserList.SelectedIndex];
+            }
+            else
+            {
+                GridUserDetails.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void BtnDeleteUser_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteUser();
+        }
+
+        private void BtnUpdateUser_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateUser();
+        }
+
     }
 }

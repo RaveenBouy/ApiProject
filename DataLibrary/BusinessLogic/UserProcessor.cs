@@ -162,7 +162,7 @@ namespace DataLibrary.BusinessLogic
 
         public static IEnumerable<UserModel> GetAllUsers(string token)
         {
-            var sql = "SELECT * FROM user";
+            var sql = "SELECT * FROM user ORDER BY IsVerified ASC";
 
             var userRole = GetUserRole(token);
 
