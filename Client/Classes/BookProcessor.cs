@@ -179,5 +179,86 @@ namespace Client.Classes
 
             return response;
         }
+
+        public async Task<List<ItemModel>> GetVisitorBooks(string value, string searchvalue)
+        {
+            JsonData json = new JsonData();
+            var bookList = new List<ItemModel>();
+
+            using (var client = new HttpClient())
+            {
+                var get = await client.GetAsync(
+                            ReferenceList.Book +
+                            $"{value}/{searchvalue}");
+
+                using (var reader = new StreamReader(await get.Content.ReadAsStreamAsync()))
+                {
+                    json = JsonMapper.ToObject(reader.ReadToEnd());
+                }
+            }
+
+            try
+            {
+                for (int i = 0; i < json.Count; i++)
+                {
+                    bookList.Add(new ItemModel
+                    {
+                        Id = (int)json[i]["id"],
+                        Title = json[i]["title"].ToString(),
+                        Description = json[i]["description"].ToString(),
+                        Author = json[i]["author"].ToString(),
+                        PublishYear = (int)json[i]["publishYear"],
+                        Access = json[i]["access"].ToString(),
+                        DateAdded = json[i]["dateAdded"].ToString()
+                    });
+                }
+
+                return bookList;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<ItemModel>> GetVisitorAllBooks()
+        {
+            JsonData json = new JsonData();
+            var bookList = new List<ItemModel>();
+
+            using (var client = new HttpClient())
+            {
+                var get = await client.GetAsync(
+                            ReferenceList.Book);
+
+                using (var reader = new StreamReader(await get.Content.ReadAsStreamAsync()))
+                {
+                    json = JsonMapper.ToObject(reader.ReadToEnd());
+                }
+            }
+
+            try
+            {
+                for (int i = 0; i < json.Count; i++)
+                {
+                    bookList.Add(new ItemModel
+                    {
+                        Id = (int)json[i]["id"],
+                        Title = json[i]["title"].ToString(),
+                        Description = json[i]["description"].ToString(),
+                        Author = json[i]["author"].ToString(),
+                        PublishYear = (int)json[i]["publishYear"],
+                        Access = json[i]["access"].ToString(),
+                        DateAdded = json[i]["dateAdded"].ToString()
+                    });
+                }
+
+                return bookList;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

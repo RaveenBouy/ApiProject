@@ -15,6 +15,7 @@ namespace Client
     public partial class MainWindow : Window
     {
         public List<ItemModel> Item { get; set; } = new List<ItemModel>();
+        public List<ItemModel> VisitorItem { get; set; } = new List<ItemModel>();
         public List<UserModel> User { get; set; } = new List<UserModel>();
         public MainWindow()
         {
@@ -145,6 +146,8 @@ namespace Client
                     GridStaffMenu.Visibility = Visibility.Visible;
                     GridHomeNav.Visibility = Visibility.Visible;
                     GridHomeLogout.Visibility = Visibility.Visible;
+                    GridViewBooksBtn.Visibility = Visibility.Hidden;
+                    GridBackground.Visibility = Visibility.Visible;
 
                     break;
                 case 1:
@@ -152,6 +155,8 @@ namespace Client
                     GridMemberHome.Visibility = Visibility.Visible;
                     GridHomeNav.Visibility = Visibility.Visible;
                     GridHomeLogout.Visibility = Visibility.Visible;
+                    GridViewBooksBtn.Visibility = Visibility.Hidden;
+                    GridBackground.Visibility = Visibility.Visible;
                     break;
             }
         }
@@ -434,6 +439,30 @@ namespace Client
             LBUserList.DataContext = User;
         }
 
+        private async void SearchAllVisitor()
+        {
+            LBVisitorItemList.DataContext = null;
+            GridVisitorItemDetails.DataContext = null;
+            BookProcessor book = new BookProcessor();
+            VisitorItem = await book.GetVisitorAllBooks();
+            LBVisitorItemList.DataContext = VisitorItem;
+        }
+
+        private async void SearchVisitor()
+        {
+            LBVisitorItemList.DataContext = null;
+            GridVisitorItemDetails.DataContext = null;
+
+            ComboBoxItem typeItem2 = (ComboBoxItem)CBVisitorSearchType.SelectedItem;
+            string value = typeItem2.Content.ToString();
+
+            var searchvalue = TBVisitorSearchValue.Text.Equals("") ? "0" : TBVisitorSearchValue.Text;
+
+            BookProcessor book = new BookProcessor();
+            VisitorItem = await book.GetVisitorBooks(value, searchvalue);
+            LBVisitorItemList.DataContext = VisitorItem;
+        }
+
         private void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
             if (Regex.IsMatch(Username.Text, @"^[a-zA-Z0-9-_%£$@\\/]*$"))
@@ -493,7 +522,12 @@ namespace Client
 
         private void BtnViewAllBooks_Click(object sender, RoutedEventArgs e)
         {
-
+            GridVisitor.Visibility = Visibility.Visible;
+            GridHomeNav.Visibility = Visibility.Visible;
+            GridHomeLogout.Visibility = Visibility.Visible;
+            GridRegister.Visibility = Visibility.Hidden;
+            GridLogin.Visibility = Visibility.Hidden;
+            GridViewBooksBtn.Visibility = Visibility.Hidden;
         }
 
         private void LBItemList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -544,6 +578,9 @@ namespace Client
             GridItemManage.Visibility = Visibility.Hidden;
             GridViewUsers.Visibility = Visibility.Hidden;
             GridUpdateUsers.Visibility = Visibility.Hidden;
+            GridVisitor.Visibility = Visibility.Hidden;
+            GridViewBooksBtn.Visibility = Visibility.Visible;
+            GridBackground.Visibility = Visibility.Hidden;
         }
 
         private void BtnHome_Click(object sender, RoutedEventArgs e)
@@ -555,6 +592,7 @@ namespace Client
             GridMemberHome.Visibility = Visibility.Hidden;
             GridViewUsers.Visibility = Visibility.Hidden;
             GridUpdateUsers.Visibility = Visibility.Hidden;
+            GridVisitor.Visibility = Visibility.Hidden;
         }
 
         private void BtnAddItem_Click(object sender, RoutedEventArgs e)
@@ -571,7 +609,7 @@ namespace Client
         {
             DeleteItem();
         }
-        
+
         private void BtnViewUsers_Click(object sender, RoutedEventArgs e)
         {
             GetUsers();
@@ -614,5 +652,27 @@ namespace Client
             UpdateUser();
         }
 
+        private void LBVisitorItemList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LBVisitorItemList.SelectedIndex != -1)
+            {
+                GridVisitorItemDetails.Visibility = Visibility.Visible;
+                GridVisitorItemDetails.DataContext = VisitorItem[LBVisitorItemList.SelectedIndex];
+            }
+            else
+            {
+                GridVisitorItemDetails.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void BtnVisitorSearch_Click(object sender, RoutedEventArgs e)
+        {
+            SearchVisitor();
+        }
+
+        private void BtnVisitorSearchAll_Click(object sender, RoutedEventArgs e)
+        {
+            SearchAllVisitor();
+        }
     }
 }

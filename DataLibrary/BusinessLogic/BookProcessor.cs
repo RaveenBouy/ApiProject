@@ -19,12 +19,22 @@ namespace DataLibrary.BusinessLogic
 
         public static IEnumerable<ItemModel> GetBookByType(string type, string value)
         {
-            var sql = "SELECT * FROM library_item " +
-                      "WHERE Category = 'book'" +
-                     $"AND {type} LIKE '%{value}%'" +
-                     $"AND Access = 'public'";
+            StringBuilder sql = new StringBuilder();
+            sql.Append("SELECT * FROM library_item " +
+                       "WHERE Category = 'book' " +
+                      $"AND Access = 'public' "+
+                      $"AND {type} ");
 
-            return SqlDataAccess.LoadData<ItemModel>(sql);
+            if (type.ToLower().Equals("id") || type.ToLower().Equals("publishyear"))
+            {
+                sql.Append($" = {value} ");
+            }
+            else
+            {
+                sql.Append($" LIKE '%{value}%' ");
+            }
+
+            return SqlDataAccess.LoadData<ItemModel>(sql.ToString());
         }
 
         public static List<ItemModel> GetBookById(int id)

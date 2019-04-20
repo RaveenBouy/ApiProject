@@ -1098,11 +1098,12 @@
 
     </Window.Resources>
 
-    <Grid Width="642" Height="419">
+    <Grid Width="642">
         <Grid.Background>
-            <ImageBrush ImageSource="Resources/Images/Bg.png" Stretch="Uniform" Opacity="0.2"/>
+            <ImageBrush ImageSource="Resources/Images/Bg.png" Opacity="0.2" Stretch="Uniform"/>
         </Grid.Background>
-        <Grid x:Name="GridHome" Width="642" Margin="0,0,0,-5">
+        <Grid x:Name="GridBackground" Visibility="Hidden" Background="#FF5B5959" Opacity="0.5"/>
+        <Grid x:Name="GridHome" Width="642" Margin="0,6,0,-1">
             <Grid Width="642">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.7*"/>
@@ -1112,24 +1113,30 @@
                     <Grid Width="Auto">
                         <TextBlock Text="National Library of Sri Lanka" Grid.Column="0" TextAlignment="Center" FontSize="38" FontWeight="Bold" Margin="47,0,16,0"/>
                     </Grid>
-                    <Grid Name="GridHomeNav" Visibility="Collapsed" Grid.Column="1" Width="65" >
+                    <Grid x:Name="GridHomeNav" Visibility="Collapsed" Grid.Column="1" Width="65" >
                         <StackPanel Margin="0,3,0,0">
-                            <Grid Name="GridHomeLogout" Visibility="Collapsed" Height="29">
-                                <Button Name="BtnLogout" Style="{StaticResource ImageBtn2}" Content="Logout"  Width="50" Height="26" Click="BtnLogout_Click" Margin="8,1,7,0" VerticalAlignment="Top">
+                            <Grid x:Name="GridHomeLogout" Visibility="Collapsed" Height="29">
+                                <Button x:Name="BtnLogout" Content="Logout"  Width="50" Height="26" Click="BtnLogout_Click" Margin="8,1,7,0" VerticalAlignment="Top">
                                     <Button.Resources>
-                                        <Style TargetType="Border">
+                                        <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="5"/>
                                         </Style>
                                     </Button.Resources>
+                                    <Button.Style>
+                                        <StaticResource ResourceKey="ImageBtn2"/>
+                                    </Button.Style>
                                 </Button>
                             </Grid>
-                            <Grid Name="GridHomeHome" Visibility="Collapsed" Height="34">
-                                <Button Name="BtnHome" Style="{StaticResource ImageBtn2}" Content="Home" Width="50" Height="26" Click="BtnHome_Click" Margin="2,2,2,-2">
+                            <Grid x:Name="GridHomeHome" Visibility="Collapsed" Height="34">
+                                <Button x:Name="BtnHome" Content="Home" Width="50" Height="26" Click="BtnHome_Click" Margin="8,3,7,5">
                                     <Button.Resources>
-                                        <Style TargetType="Border">
+                                        <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="5"/>
                                         </Style>
                                     </Button.Resources>
+                                    <Button.Style>
+                                        <StaticResource ResourceKey="ImageBtn2"/>
+                                    </Button.Style>
                                 </Button>
                             </Grid>
                         </StackPanel>
@@ -1139,7 +1146,7 @@
             <Grid x:Name="GridDynamic" Margin="0,64,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="360" Width="642">
 
                 <!-- Login Grid-->
-                <Grid x:Name="GridLogin" Margin="181,39,167,64" Background="#FF515151" d:IsHidden="True">
+                <Grid x:Name="GridLogin" Margin="181,39,167,64" Background="#FF515151" Opacity="0.9">
                     <Grid.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="10"/>
@@ -1170,7 +1177,7 @@
                         </TextBox>
                         <TextBlock IsHitTestVisible="False" Margin="5,-5,0,0" VerticalAlignment="Center" Text="Password" Foreground="White" Visibility="{Binding Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Password}" FontSize="16" HorizontalAlignment="Center" FontFamily="Century Gothic" />
                     </Grid>
-                    <Button Name="BtnLogin" Margin="101,160,104,59" Content="Login" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="89" Click="BtnLogin_Click">
+                    <Button x:Name="BtnLogin" Margin="101,160,104,59" Content="Login" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="89" Click="BtnLogin_Click">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}" >
                                 <Setter Property="CornerRadius" Value="5"/>
@@ -1184,7 +1191,7 @@
                 </Grid>
 
                 <!-- Register Grid-->
-                <Grid x:Name="GridRegister" Visibility="Hidden" Margin="181,39,167,64" Background="#FF515151" d:IsHidden="True">
+                <Grid x:Name="GridRegister" Visibility="Hidden" Margin="181,39,167,64" Background="#FF515151" Opacity="0.9">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
@@ -1210,7 +1217,7 @@
                         </TextBox>
                         <TextBlock IsHitTestVisible="False" Margin="5,-5,0,0" VerticalAlignment="Center" Text="Password" Foreground="White" Visibility="{Binding Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Password1}" FontSize="16" HorizontalAlignment="Center" FontFamily="Century Gothic" />
                     </Grid>
-                    <Button Name="BtnRegister" Margin="102,188,103,31" Content="Register" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="89" Click="BtnRegister_Click">
+                    <Button x:Name="BtnRegister" Margin="102,188,103,31" Content="Register" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="89" Click="BtnRegister_Click">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}" >
                                 <Setter Property="CornerRadius" Value="5"/>
@@ -1228,7 +1235,7 @@
                 </Grid>
 
                 <!-- View Books btn grid-->
-                <Grid Name="GridViewBooksBtn" Margin="516,21,5,194" d:IsHidden="True">
+                <Grid x:Name="GridViewBooksBtn" Margin="516,21,5,194">
                     <TextBlock Text="Access for everyone!" Margin="12,91,-5,18" RenderTransformOrigin="0.5,0.5" Foreground="Red">
                         <TextBlock.RenderTransform>
                             <TransformGroup>
@@ -1259,12 +1266,116 @@
                     </Button>
                 </Grid>
 
-                <!-- View Books Grid -->
-                <Grid d:IsHidden="True"/>
+                <!-- View Books Grid - visitor -->
+                <Grid x:Name="GridVisitor" Visibility="Hidden">
+                    <Grid x:Name="GridVisitorSearchValues" Margin="0,54,0,0">
+                        <ListBox x:Name="LBVisitorItemList" ItemsSource="{Binding}" SelectedIndex="0"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="#FF8F8F8F" BorderBrush="{x:Null}" Foreground="White" SelectionChanged="LBVisitorItemList_SelectionChanged" Margin="30,10,408,21">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="10,10,0,10" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Grid.Column="0" Grid.Row="0" Text="Title: " Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                            <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Title}" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Author: " Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Author}" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Grid x:Name="GridVisitorItemDetails" Visibility="Hidden" Margin="274,10,10,21">
+                            <ScrollViewer>
+                                <StackPanel Margin="10,10,0,10" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock  Text="ID: " Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="{Binding Id}" Grid.Column="1" Grid.Row="0" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="Title: " Grid.Column="0" Grid.Row="1" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="{Binding Title}" Grid.Column="1" Grid.Row="1" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="Description: " Grid.Column="0" Grid.Row="2" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="{Binding Description}" Grid.Column="1" Grid.Row="2" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="Author: " Grid.Column="0" Grid.Row="3" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="{Binding Author}" Grid.Column="1" Grid.Row="3" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="PublishYear: " Grid.Column="0" Grid.Row="4" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="{Binding PublishYear}" Grid.Column="1" Grid.Row="4" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="Access: " Grid.Column="0" Grid.Row="5" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="{Binding Access}" Grid.Column="1" Grid.Row="5" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="DateAdded: " Grid.Column="0" Grid.Row="6" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                        <TextBlock  Text="{Binding DateAdded}" Grid.Column="1" Grid.Row="6" Margin="0,5,0,0" FontWeight="Bold" TextWrapping="Wrap" Foreground="Black" FontFamily="Century Gothic"/>
+                                    </Grid>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Grid>
+                    <Grid x:Name="GridVisitorNavBar" Margin="0,0,0,296">
+                        <ComboBox x:Name="CBCategory1" HorizontalAlignment="Left" Margin="30,21,0,0" VerticalAlignment="Top" Width="100" Height="30" SelectedIndex="0">
+                            <ComboBoxItem x:Name="T36" Content="Books" />
+                        </ComboBox>
+                        <ComboBox x:Name="CBVisitorSearchType" HorizontalAlignment="Left" Margin="142,21,0,0" VerticalAlignment="Top" Width="104" Height="30" SelectedIndex="0">
+                            <ComboBoxItem x:Name="T44" Content="Id" />
+                            <ComboBoxItem x:Name="T45" Content="Title" />
+                            <ComboBoxItem x:Name="T46" Content="Description"/>
+                            <ComboBoxItem x:Name="T47" Content="Author" />
+                            <ComboBoxItem x:Name="T48" Content="PublishYear"/>
+                        </ComboBox>
+                        <TextBox x:Name="TBVisitorSearchValue" Background="#FF333333" BorderBrush="#FFA6A6A6" SelectionBrush="{x:Null}" Foreground="White" FontSize="16" FontFamily="Century Gothic" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="262,19,249,13">
+                            <TextBox.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <Button x:Name="BtnVisitorSearch" Margin="407,20,146,16" Content="Search" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="89" Click="BtnVisitorSearch_Click">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}" >
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                            <Button.Style>
+                                <StaticResource ResourceKey="ImageBtn2"/>
+                            </Button.Style>
+                        </Button>
+                        <Button x:Name="BtnVisitorSearchAll" Margin="510,20,43,16" Content="Search All" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="89" Click="BtnVisitorSearchAll_Click">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}" >
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                            </Button.Resources>
+                            <Button.Style>
+                                <StaticResource ResourceKey="ImageBtn2"/>
+                            </Button.Style>
+                        </Button>
+                        <TextBlock Text="Category" Margin="52,0,539,35"/>
+                        <TextBlock Text="Search Type" Margin="162,0,412,35"/>
+                        <TextBlock Text="Search Value" Margin="292,0,278,35"/>
+                    </Grid>
+                </Grid>
 
                 <!-- Logged in user Grid-->
-                <Grid Name="GridMemberHome" Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Center" Height="360" Width="642" Background="#FFBDBDBD">
-                    <Grid Name="GridNavBar" Margin="0,0,0,296">
+                <Grid x:Name="GridMemberHome" Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Center" Height="360" Width="642" >
+                    <Grid x:Name="GridNavBar" Margin="0,0,0,296">
                         <ComboBox x:Name="CBCategory" HorizontalAlignment="Left" Margin="30,21,0,0" VerticalAlignment="Top" Width="100" Height="30" SelectedIndex="0">
                             <ComboBoxItem x:Name="T3" Content="Books" />
                             <ComboBoxItem x:Name="T4" Content="Newspapers"/>
@@ -1336,7 +1447,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Grid Name="GridItemDetails" Visibility="Hidden" Margin="274,10,10,21">
+                        <Grid x:Name="GridItemDetails" Visibility="Hidden" Margin="274,10,10,21">
                             <ScrollViewer>
                                 <StackPanel Margin="10,10,0,10" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
                                     <Grid>
@@ -1374,9 +1485,8 @@
                     </Grid>
                 </Grid>
 
-                <!-- Logged in Staff Grid-->
-                <Grid Name="GridStaffHome" Visibility="Hidden" Background="#FFBDBDBD">
-                    <Grid Name="GridStaffMenu" d:IsHidden="True">
+                <Grid x:Name="GridStaffHome" Visibility="Hidden">
+                    <Grid x:Name="GridStaffMenu" d:IsHidden="True">
                         <TextBlock Text="Manage Library Items" FontSize="20" Margin="215,19,229,300"/>
                         <TextBlock Text="Manage Users" FontSize="20" Margin="252,193,261,127"/>
                         <Button x:Name="BtnStaffViewUsers" Margin="160,232,355,65" Content="View Users" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="127" Click="BtnStaffViewUsers_Click" Height="53">
@@ -1421,7 +1531,7 @@
                         </Button>
                     </Grid>
 
-                    <Grid Name="GridItemManage" Visibility="Hidden">
+                    <Grid x:Name="GridItemManage" Visibility="Hidden">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="0.5*"/>
@@ -1568,7 +1678,7 @@
                             </ComboBox>
                         </Grid>
                     </Grid>
-                    <Grid Name="GridViewUsers" Visibility="Hidden">
+                    <Grid x:Name="GridViewUsers" Visibility="Hidden">
                         <Button x:Name="BtnViewUsers" Margin="31,12,521,319" Cursor="Hand" Content="View All Users" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="90" Click="BtnViewUsers_Click" Height="29">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}" >
@@ -1639,7 +1749,7 @@
                         </Grid>
                     </Grid>
 
-                    <Grid Name="GridUpdateUsers" Visibility="Hidden">
+                    <Grid x:Name="GridUpdateUsers" Visibility="Hidden">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="0.5*"/>
@@ -1690,7 +1800,7 @@
                                 </TextBox.Resources>
                             </TextBox>
                             <TextBlock FontSize="18" Foreground="Black"  Margin="23,44,193,291"><Run Text=" "/><Run Text="     "/><Run Text=" "/><Run Text=" "/><Run Text="ID"/><Run Text=" "/><Run Text="     "/><Run Text=" "/><Run Text=" "/><Run Text=":"/><Run Text=" "/></TextBlock>
-                            <Button x:Name="BtnDeleteUser" Margin="133,87,98,244" Cursor="Hand" Content="Delete Item" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="90" Click="BtnDeleteUser_Click" Height="29">
+                            <Button x:Name="BtnDeleteUser" Margin="133,87,98,244" Cursor="Hand" Content="Delete User" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="90" Click="BtnDeleteUser_Click" Height="29">
                                 <Button.Resources>
                                     <Style TargetType="{x:Type Border}" >
                                         <Setter Property="CornerRadius" Value="5"/>
