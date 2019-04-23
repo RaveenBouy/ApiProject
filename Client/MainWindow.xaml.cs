@@ -10,7 +10,7 @@ using System.Windows.Input;
 namespace Client
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// MVVM was not used 😂
     /// </summary>
     public partial class MainWindow : Window
     {

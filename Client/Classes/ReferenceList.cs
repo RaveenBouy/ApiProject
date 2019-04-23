@@ -8,7 +8,7 @@ namespace Client.Classes
 {
     public static class ReferenceList
     {
-        public static string IpAddr { get; set; } = "http://192.168.1.105:51754/";
+        public static string IpAddr { get; set; } = "http://192.168.1.105:33333/";
         public static string Book { get; set; } = $"{IpAddr}/api/book/";
         public static string BookMember { get; set; } = $"{IpAddr}/api/book/member/";
         public static string BookStaff { get; set; } = $"{IpAddr}/api/book/staff/";

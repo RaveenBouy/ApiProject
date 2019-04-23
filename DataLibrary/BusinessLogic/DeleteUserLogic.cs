@@ -79,7 +79,7 @@ namespace DataLibrary.BusinessLogic
                 case 6:
                     jsonResponse.Response = 200;
                     jsonResponse.Status = "Success";
-                    jsonResponse.Info = "Item Deleted successfully!";
+                    jsonResponse.Info = "User Deleted successfully!";
                     break;
             }
 

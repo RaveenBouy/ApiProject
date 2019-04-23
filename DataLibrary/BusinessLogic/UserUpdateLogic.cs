@@ -89,7 +89,7 @@ namespace DataLibrary.BusinessLogic
                 case 8:
                     jsonResponse.Response = 200;
                     jsonResponse.Status = "Success";
-                    jsonResponse.Info = "Item Updated successfully!";
+                    jsonResponse.Info = "User Updated successfully!";
                     break;
             }
 
